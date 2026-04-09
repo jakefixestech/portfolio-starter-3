@@ -1,32 +1,32 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
 ---
 
 <Layout title="Our Services | North Country Lawn & Landscape" description="Professional lawn mowing, landscaping, spring cleanup, mulching, and snow removal services in Littleton, NH and the North Country region.">
   <!-- Header -->
-  <!-- Header -->
   <header class="bg-white border-b border-gray-200">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2" aria-label="North Country Lawn & Landscape - Home">
-        <svg class="w-8 h-8 text-green-700" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="w-8 h-8 text-green-700" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         </svg>
         <span class="font-bold text-lg text-green-800">North Country Lawn & Landscape</span>
       </a>
       <nav aria-label="Main navigation" class="hidden md:flex items-center gap-6">
-        <a href="/" class="text-green-700 font-medium">Home</a>
-        <a href="/services" class="text-gray-600 hover:text-green-700">Services</a>
+        <a href="/" class="text-gray-600 hover:text-green-700">Home</a>
+        <a href="/services" class="text-green-700 font-medium">Services</a>
         <a href="/contact" class="text-gray-600 hover:text-green-700">Contact</a>
       </nav>
-      <button id="menu-btn" aria-label="Open navigation menu" class="md:hidden flex flex-col gap-1.5 p-2">
+      <button id="menu-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden flex flex-col gap-1.5 p-2">
         <span class="block w-6 h-0.5 bg-green-800"></span>
         <span class="block w-6 h-0.5 bg-green-800"></span>
         <span class="block w-6 h-0.5 bg-green-800"></span>
       </button>
     </div>
     <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white px-4 py-4 flex flex-col gap-4">
-      <a href="/" class="text-green-700 font-medium">Home</a>
-      <a href="/services" class="text-gray-600 hover:text-green-700">Services</a>
+      <a href="/" class="text-gray-600 hover:text-green-700">Home</a>
+      <a href="/services" class="text-green-700 font-medium">Services</a>
       <a href="/contact" class="text-gray-600 hover:text-green-700">Contact</a>
     </div>
   </header>
@@ -35,104 +35,292 @@ import Layout from '../layouts/Layout.astro';
     const btn = document.getElementById('menu-btn');
     const menu = document.getElementById('mobile-menu');
     btn?.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
       menu?.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
     });
   </script>
 
+  <style>
+    .flip-card {
+      perspective: 1000px;
+      height: 260px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner,
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 0.5rem;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flip-card-inner {
+        transition: none;
+      }
+    }
+  </style>
+
   <main>
     <!-- Page Header -->
-    <section class="bg-green-800">
-      <div class="max-w-6xl mx-auto px-4 py-16 md:py-20 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
-          Our Services
-        </h1>
+    <section class="bg-green-800 relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <style>
+          @keyframes blobPop {
+            0%   { transform: scale(0);    opacity: 0; }
+            30%  { transform: scale(1);    opacity: 1; }
+            45%  { transform: scale(0.93); opacity: 1; }
+            55%  { transform: scale(1.02); opacity: 1; }
+            65%  { transform: scale(0.97); opacity: 1; }
+            72%  { transform: scale(1);    opacity: 1; }
+            85%  { transform: scale(1);    opacity: 1; }
+            100% { transform: scale(0);    opacity: 0; }
+          }
+          .blob {
+            position: absolute;
+            border-radius: 9999px;
+            background: #16a34a;
+            opacity: 0;
+            animation: blobPop 4s ease-in-out infinite;
+          }
+          .blob-l1 { width: 180px; height: 180px; left: -60px;  top: 50%; margin-top: -90px;  animation-delay: 0s;   }
+          .blob-l2 { width: 110px; height: 110px; left: 80px;   top: 25%; margin-top: -55px;  animation-delay: 0.4s; }
+          .blob-l3 { width: 70px;  height: 70px;  left: 160px;  top: 70%; margin-top: -35px;  animation-delay: 0.7s; }
+          .blob-l4 { width: 50px;  height: 50px;  left: 40px;   top: 80%; margin-top: -25px;  animation-delay: 1s;   }
+          .blob-r1 { width: 180px; height: 180px; right: -60px; top: 50%; margin-top: -90px;  animation-delay: 0.2s; }
+          .blob-r2 { width: 110px; height: 110px; right: 80px;  top: 25%; margin-top: -55px;  animation-delay: 0.6s; }
+          .blob-r3 { width: 70px;  height: 70px;  right: 160px; top: 70%; margin-top: -35px;  animation-delay: 0.9s; }
+          .blob-r4 { width: 50px;  height: 50px;  right: 40px;  top: 80%; margin-top: -25px;  animation-delay: 1.2s; }
+          @media (prefers-reduced-motion: reduce) {
+            .blob { animation: none; opacity: 0; }
+          }
+        </style>
+        <div class="blob blob-l1"></div>
+        <div class="blob blob-l2"></div>
+        <div class="blob blob-l3"></div>
+        <div class="blob blob-l4"></div>
+        <div class="blob blob-r1"></div>
+        <div class="blob blob-r2"></div>
+        <div class="blob blob-r3"></div>
+        <div class="blob blob-r4"></div>
+      </div>
+      <div class="relative max-w-6xl mx-auto px-4 py-16 md:py-20 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Services</h1>
         <p class="text-green-100 text-lg max-w-2xl mx-auto text-pretty">
           Professional lawn and landscaping services for homes and businesses in the North Country.
         </p>
+        <p class="text-green-300 text-sm mt-4">Hover over a service to learn more</p>
       </div>
     </section>
 
-    <!-- Services Grid -->
+    <!-- Flip Cards Grid -->
     <section class="bg-white">
       <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+
+        <h2 class="sr-only">What We Offer</h2>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
           <!-- Lawn Mowing & Maintenance -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Lawn Mowing & Maintenance">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Lawn Mowing & Maintenance</h3>
+                  <p class="text-gray-500 text-sm">Regular mowing, edging, and trimming to keep your lawn looking its best all season long.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Lawn Mowing & Maintenance</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Weekly & bi-weekly mowing schedules</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Clean edge trimming along walks & beds</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Grass clipping cleanup & blowing</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Seasonal scheduling available</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Lawn Mowing & Maintenance</h3>
-            <p class="text-gray-600 text-sm">
-              Regular mowing, edging, and trimming to keep your lawn looking its best all season long.
-            </p>
           </div>
 
           <!-- Spring & Fall Cleanup -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Spring & Fall Cleanup">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Spring & Fall Cleanup</h3>
+                  <p class="text-gray-500 text-sm">Thorough seasonal cleanups including leaf removal, debris clearing, and bed preparation.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Spring & Fall Cleanup</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Full leaf removal & hauling</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Debris & stick clearing</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Bed cleanup & preparation</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> First & last mow of season</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Spring & Fall Cleanup</h3>
-            <p class="text-gray-600 text-sm">
-              Thorough seasonal cleanups including leaf removal, debris clearing, and bed preparation.
-            </p>
           </div>
 
           <!-- Mulching & Bed Work -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Mulching & Bed Work">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Mulching & Bed Work</h3>
+                  <p class="text-gray-500 text-sm">Fresh mulch installation, bed edging, and weed control to enhance your landscape beds.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Mulching & Bed Work</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Fresh mulch delivery & installation</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Crisp bed edging & reshaping</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Weed removal & pre-emergent</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Multiple mulch types available</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Mulching & Bed Work</h3>
-            <p class="text-gray-600 text-sm">
-              Fresh mulch installation, bed edging, and weed control to enhance your landscape beds.
-            </p>
           </div>
 
           <!-- Shrub & Bush Trimming -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Shrub & Bush Trimming">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Shrub & Bush Trimming</h3>
+                  <p class="text-gray-500 text-sm">Professional pruning and shaping of shrubs, hedges, and ornamental bushes.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Shrub & Bush Trimming</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Shaping & size reduction</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Hedge trimming & clean lines</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Ornamental pruning</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Debris removal & cleanup</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Shrub & Bush Trimming</h3>
-            <p class="text-gray-600 text-sm">
-              Professional pruning and shaping of shrubs, hedges, and ornamental bushes.
-            </p>
           </div>
 
           <!-- Loam & Seeding -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Loam & Seeding">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Loam & Seeding</h3>
+                  <p class="text-gray-500 text-sm">New lawn installation, overseeding, and soil preparation for lush, healthy grass.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Loam & Seeding</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Loam delivery & grading</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> New lawn seeding & installation</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Overseeding thin or bare areas</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Starter fertilizer application</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Loam & Seeding</h3>
-            <p class="text-gray-600 text-sm">
-              New lawn installation, overseeding, and soil preparation for lush, healthy grass.
-            </p>
           </div>
 
           <!-- Snow Removal -->
-          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m0-18l-3 3m3-3l3 3m-6 12l3-3m3 3l-3-3M3 12h18M3 12l3-3m-3 3l3 3m12-6l3 3m-3 3l3-3" />
-              </svg>
+          <div class="flip-card" role="region" aria-label="Snow Removal">
+            <div class="flip-card-inner">
+              <div class="flip-card-front bg-gray-50 border border-gray-200 p-8 flex flex-col items-start justify-between">
+                <div class="w-14 h-14 mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m0-18l-3 3m3-3l3 3m-6 12l3-3m3 3l-3-3M3 12h18M3 12l3-3m-3 3l3 3m12-6l3 3m-3 3l3-3" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-xl text-gray-800 mb-2">Snow Removal</h3>
+                  <p class="text-gray-500 text-sm">Reliable residential and commercial snow plowing and walkway clearing throughout winter.</p>
+                </div>
+                <p class="text-green-600 text-xs font-medium mt-4 flex items-center gap-1" aria-hidden="true">
+                  <span>Hover to learn more</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </p>
+              </div>
+              <div class="flip-card-back bg-green-700 border border-green-700 p-8 flex flex-col justify-center">
+                <h3 class="font-bold text-xl text-white mb-4">Snow Removal</h3>
+                <ul class="space-y-2 text-green-100 text-sm">
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Residential & commercial plowing</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Walkway & stair clearing</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Salt & sand application</li>
+                  <li class="flex items-start gap-2"><span class="text-green-300 mt-0.5" aria-hidden="true">✓</span> Seasonal contracts available</li>
+                </ul>
+              </div>
             </div>
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Snow Removal</h3>
-            <p class="text-gray-600 text-sm">
-              Reliable residential and commercial snow plowing and walkway clearing throughout winter.
-            </p>
           </div>
+
         </div>
       </div>
     </section>
@@ -140,26 +328,18 @@ import Layout from '../layouts/Layout.astro';
     <!-- CTA Section -->
     <section class="bg-green-700">
       <div class="max-w-6xl mx-auto px-4 py-16 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
-          Get a Free Estimate
-        </h2>
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Get a Free Estimate</h2>
         <p class="text-green-100 mb-8 max-w-xl mx-auto">
           Ready to get started? Contact us today for a free, no-obligation estimate on any of our services.
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="tel:6035550142"
-            class="inline-flex items-center gap-2 bg-white text-green-800 font-semibold px-6 py-3 rounded-md hover:bg-gray-100"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <a href="tel:6035550142" class="inline-flex items-center gap-2 bg-white text-green-800 font-semibold px-6 py-3 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             (603) 555-0142
           </a>
-          <a
-            href="/contact"
-            class="inline-block bg-green-800 text-white font-semibold px-6 py-3 rounded-md border-2 border-green-800 hover:bg-green-900 hover:border-green-900"
-          >
+          <a href="/contact" class="inline-block bg-green-800 text-white font-semibold px-6 py-3 rounded-md border-2 border-green-800 hover:bg-green-900 hover:border-green-900 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-700">
             Contact Us
           </a>
         </div>
@@ -167,15 +347,5 @@ import Layout from '../layouts/Layout.astro';
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-gray-100 border-t border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 py-8 text-center">
-      <p class="text-gray-600 text-sm">
-        &copy; 2026 North Country Lawn & Landscape. All rights reserved.
-      </p>
-      <p class="text-gray-500 text-sm mt-1">
-        Serving Littleton, NH and the North Country
-      </p>
-    </div>
-  </footer>
+  <Footer />
 </Layout>
