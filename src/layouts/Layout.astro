@@ -8,6 +8,7 @@ interface Props {
 
 const { title, description = "Professional lawn care and landscaping services in Littleton, NH and the North Country region." } = Astro.props;
 const ogImage = 'https://starter3.jakefixestech.com/lawn.jpg';
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -18,6 +19,20 @@ const ogImage = 'https://starter3.jakefixestech.com/lawn.jpg';
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://starter3.jakefixestech.com${currentPath}`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="North Country Lawn Care" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
   </head>
   <body class="min-h-screen bg-white text-gray-800 font-sans antialiased">
     <slot />
